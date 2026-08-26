@@ -1,19 +1,20 @@
 buildscript {
     repositories {
         mavenCentral()
+        gradlePluginPortal()
         maven { url = "https://maven.minecraftforge.net/" }
         maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
         maven { url = "https://jitpack.io/" }
     }
     dependencies {
-        
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
         
-        // Mixin
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
         
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
-        classpath "com.github.johnrengelman:shadow:6.1.0"
+        
+        classpath "com.github.jengelman.gradle.plugins:shadow:6.1.0"
+        
         classpath "com.gorylenko.gradle-git-properties:gradle-git-properties:2.4.2"
     }
 }
