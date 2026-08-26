@@ -1,22 +1,45 @@
-plugins {
-    id "java"
-    id "idea"
-    id "org.jetbrains.kotlin.jvm"
-    id "com.github.johnrengelman.shadow" version "6.1.0"
-    id "net.minecraftforge.gradle.forge"
-    id "org.spongepowered.mixin"
-    id "com.gorylenko.gradle-git-properties" version "2.4.0"
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = "https://maven.minecraftforge.net/" }
+        maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
+        maven { url = "https://jitpack.io/" }
+    }
+    dependencies {
+        
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        
+        // Mixin
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21"
+        classpath "com.github.johnrengelman:shadow:6.1.0"
+        classpath "com.gorylenko.gradle-git-properties:gradle-git-properties:2.4.2"
+    }
 }
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'kotlin'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'com.gorylenko.gradle-git-properties'
+apply plugin: 'java'
+apply plugin: 'idea'
 
 repositories {
     mavenLocal()
     mavenCentral()
     maven { url = "https://repo.spongepowered.org/repository/maven-public/" }
     maven { url = "https://jitpack.io/" }
-//    flatDir {
-//        dirs 'libs'
-//    }
 }
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+sourceCompatibility = targetCompatibility = 1.8
+compileJava.options.encoding = "UTF-8"
+
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
