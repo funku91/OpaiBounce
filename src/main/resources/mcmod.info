@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "opai",
+    "name": "Opai",
+    "description": "A free mixin-based injection hacked-client",
+    "version": "${version}",
+    "mcversion": "1.8.9",
+    "url": "https://liquidbounce.net",
+    "updateUrl": "",
+    "authorList": ["CCBlueX","PickBowen","bzym2"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
