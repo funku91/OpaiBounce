@@ -1,36 +1,39 @@
-name: Build
+name: Build LiquidBounce Legacy
 
 on:
   push:
-    branches: [ legacy ]
+    branches: [ legacy, main, master ]
   pull_request:
-    branches: [ legacy ]
+    branches: [ legacy, main, master ]
+  workflow_dispatch:   # 允许手动触发
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository and submodules
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Setup java
+
+      - name: Set up JDK 8
         uses: actions/setup-java@v4
         with:
-          distribution: "adopt"
-          java-version: 8
-          cache: "gradle"
-      - name: Build
-        run: ./gradlew build
-      - name: Upload artifact
-        run: |
-          cd build/libs
-          export JAR=$(find . -regex '.*liquidbounce-b[0-9|.]*\.jar')
-          export LB_VERSION=$(echo $JAR | sed -r 's/.\/liquidbounce-([a-zA-Z][0-9]+)\.jar/\1/')
-          export MINECRAFT_VERSION='1.8.9'
-          echo Version: $LB_VERSION, Minecraft: $MINECRAFT_VERSION
-          cp $JAR zip/liquidbounce.jar
-          cd zip
-          zip -r liquidbounce.zip *
-          md5sum liquidbounce.zip
-          curl --connect-timeout 30 -m 300 -X POST -F "artifact=@liquidbounce.zip" -H "Authorization: ${{ secrets.NIGHTLY_PASS }}" -F "gh_id=${{ github.event.head_commit.id }}" -F "gh_ref=${{ github.ref }}" -F "gh_message=${{ github.event.head_commit.message }}" -F "gh_timestamp=${{ github.event.head_commit.timestamp }}" -F "lb_version=$LB_VERSION" -F "mc_version=$MINECRAFT_VERSION" -F "jre_version=8" -F "subsystem=forge" https://api.liquidbounce.net/api/v1/version/new
+          distribution: 'temurin'   # 或 'zulu' / 'adopt'
+          java-version: '8'
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Setup Dev Workspace & Build
+        run: ./gradlew --stacktrace setupDevWorkspace build
+        # 对应 README 中的命令（去掉了 idea/eclipse，因为 CI 不需要 IDE 配置）
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiquidBounce-Legacy-Build
+          path: |
+            build/libs/*.jar
+            build/libs/zip/**
+          if-no-files-found: warn
