@@ -10,7 +10,6 @@ pluginManagement {
         eachPlugin {
             switch (requested.id.id) {
                 case "net.minecraftforge.gradle.forge":
-                    // 关键：改用 asbyth 的源
                     useModule("com.github.asbyth:ForgeGradle:${forgegradle_version}")
                     break
                 case "org.spongepowered.mixin":
